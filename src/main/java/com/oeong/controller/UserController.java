@@ -50,15 +50,16 @@ public class UserController {
     // 登录方法
     @PostMapping("/login")
     public String login(User user, Model model) {
-        //获取当前的用户
+        //获取当前的用户 每个shiro拦截到的请求，都会根据seesionid创建Subject,清除当前线程的绑定，然后重新绑定的线程中，之后执行过滤器。
+        //所以我们再SecurityUtils.getSubject()中获取的一直是当前用户的信息。
         Subject subject = SecurityUtils.getSubject();
         //封装用户的登录数据
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 
         try {
             subject.login(token);
-            Session session = subject.getSession();
-            session.setAttribute("user", (User) subject.getPrincipal());
+            Session session = subject.getSession();//
+            session.setAttribute("user", (User) subject.getPrincipal());//用来设置session值的，sessionName是名称，object是你要保存的对象。
             System.out.println("登录成功");
             return "redirect:/file/index";
         } catch (UnknownAccountException e) {

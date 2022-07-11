@@ -11,7 +11,7 @@ spring:
     password: root
 
 server:
-  port: 8181
+  port: 8686
   servlet:
     context-path: /fileStorage
 
